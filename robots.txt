@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://TEN-MIEN-CUA-BAN.com/sitemap.xml
