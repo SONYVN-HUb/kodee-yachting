@@ -5,6 +5,33 @@ const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const hasG=typeof window.gsap!=='undefined';
 document.documentElement.classList.remove('no-js');
 
+/* ---------- i18n ---------- */
+const LANG=((document.documentElement.lang||'vi').slice(0,2).toLowerCase());
+const I18N={
+ vi:{loc:'vi-VN',copied:'Đã sao chép',copiedSend:'Đã sao chép nội dung — dán vào WhatsApp để gửi',
+  msg:d=>`Chào ${C.brand||'bạn'}, mình muốn đặt du thuyền:\n• Du thuyền: ${d.yacht}\n• Ngày: ${d.date||'(chưa chọn)'}\n• Khung giờ: ${d.slot}\n• Số khách: ${d.guests}\n• Họ tên: ${d.name}\n• SĐT: ${d.phone}\n• Ghi chú: ${d.note||'-'}`,
+  wxLoading:'Đang tải thời tiết…',wxFail:'Chưa tải được thời tiết lúc này. Nhắn WhatsApp để tụi mình check giúp nhé!',
+  feels:'cảm giác',kmh:'km/h',wind:'Gió',gust:'giật',rain:'Mưa',today:'Hôm nay',
+  hintGood:'🟢 Gợi ý: gió nhẹ, ít mưa — vibe đẹp để ra khơi!',hintOk:'🟡 Gợi ý: có gió hoặc khả năng mưa — vẫn đi được, nên hỏi trước giờ chạy.',hintBad:'🔴 Gợi ý: gió mạnh / mưa dông — nên hỏi lại lịch tàu trước khi đi.',
+  hintNote:'Chỉ là gợi ý tự động, không phải cam kết — thuyền trưởng quyết định theo điều kiện thực tế.',
+  wmo:{0:'Trời quang',1:'Nắng nhẹ',2:'Mây rải rác',3:'Nhiều mây',45:'Sương mù',48:'Sương mù',51:'Mưa phùn',53:'Mưa phùn',55:'Mưa phùn',61:'Mưa nhỏ',63:'Mưa vừa',65:'Mưa to',80:'Mưa rào',81:'Mưa rào',82:'Mưa rào lớn',95:'Dông',96:'Dông kèm mưa đá',99:'Dông kèm mưa đá'}},
+ en:{loc:'en-GB',copied:'Copied',copiedSend:'Copied — paste it into WhatsApp to send',
+  msg:d=>`Hi ${C.brand||'there'}, I'd like to book a yacht:\n• Yacht: ${d.yacht}\n• Date: ${d.date||'(not chosen)'}\n• Time slot: ${d.slot}\n• Guests: ${d.guests}\n• Name: ${d.name}\n• Phone/WhatsApp: ${d.phone}\n• Notes: ${d.note||'-'}`,
+  wxLoading:'Loading weather…',wxFail:"Couldn't load the weather right now. Ping us on WhatsApp and we'll check for you!",
+  feels:'feels like',kmh:'km/h',wind:'Wind',gust:'gusts',rain:'Rain',today:'Today',
+  hintGood:'🟢 Hint: light wind, low rain chance — great vibe for a boat day!',hintOk:'🟡 Hint: some wind or rain possible — usually fine, but check with us before departure.',hintBad:'🔴 Hint: strong wind / storms — please re-check the schedule with us before you go.',
+  hintNote:'Automatic hint only, not a guarantee — the captain decides based on real conditions.',
+  wmo:{0:'Clear sky',1:'Mostly sunny',2:'Partly cloudy',3:'Cloudy',45:'Fog',48:'Fog',51:'Drizzle',53:'Drizzle',55:'Drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',80:'Showers',81:'Showers',82:'Heavy showers',95:'Thunderstorm',96:'Thunderstorm & hail',99:'Thunderstorm & hail'}},
+ ru:{loc:'ru-RU',copied:'Скопировано',copiedSend:'Скопировано — вставьте текст в WhatsApp и отправьте',
+  msg:d=>`Здравствуйте, ${C.brand||''}! Хочу забронировать яхту:\n• Яхта: ${d.yacht}\n• Дата: ${d.date||'(не выбрана)'}\n• Время: ${d.slot}\n• Гостей: ${d.guests}\n• Имя: ${d.name}\n• Телефон/WhatsApp: ${d.phone}\n• Комментарий: ${d.note||'-'}`,
+  wxLoading:'Загружаем погоду…',wxFail:'Не удалось загрузить погоду. Напишите нам в WhatsApp — подскажем!',
+  feels:'ощущается как',kmh:'км/ч',wind:'Ветер',gust:'порывы',rain:'Дождь',today:'Сегодня',
+  hintGood:'🟢 Подсказка: слабый ветер, мало осадков — отличный день для яхты!',hintOk:'🟡 Подсказка: возможен ветер или дождь — обычно выходим, но уточните у нас перед поездкой.',hintBad:'🔴 Подсказка: сильный ветер / гроза — уточните расписание перед выездом.',
+  hintNote:'Это автоматическая подсказка, а не гарантия — решение принимает капитан по фактической погоде.',
+  wmo:{0:'Ясно',1:'Солнечно',2:'Переменная облачность',3:'Облачно',45:'Туман',48:'Туман',51:'Морось',53:'Морось',55:'Морось',61:'Небольшой дождь',63:'Дождь',65:'Сильный дождь',80:'Ливень',81:'Ливень',82:'Сильный ливень',95:'Гроза',96:'Гроза с градом',99:'Гроза с градом'}}
+};
+const T=I18N[LANG]||I18N.vi;
+
 /* ---------- contact wiring ---------- */
 const digits=s=>(s||'').replace(/[^0-9+]/g,'');
 const links={
@@ -16,16 +43,10 @@ const links={
   mail: C.email?('mailto:'+C.email):'',
   yt: C.youtubeUrl||''
 };
-const labels={zalo:'số Zalo',tel:'WhatsApp',wa:'WhatsApp',fb:'link Facebook',msg:'Messenger',mail:'email',yt:'kênh YouTube'};
 $$('[data-contact]').forEach(a=>{
   const k=a.dataset.contact, url=links[k];
   if(url){a.href=url; if(/^https/.test(url)){a.target='_blank';a.rel='noopener'}}
-  else{
-    a.dataset.missing='1';
-    if(a.closest('.sticky-cta,.fab,.socials,.header-actions')){a.hidden=true;return;}
-    a.href='#lien-he';
-    a.addEventListener('click',e=>{e.preventDefault();toast('Chủ trang chưa điền '+ (labels[k]||k) +' trong assets/js/config.js');});
-  }
+  else{ a.dataset.missing='1'; a.hidden=true; a.style.display='none'; }
 });
 $$('[data-contact-text]').forEach(el=>{
   const k=el.dataset.contactText;
@@ -37,9 +58,11 @@ $$('[data-contact-text]').forEach(el=>{
     mail:C.email,
     yt:C.youtubeChannelName||C.youtubeUrl
   }[k];
-  el.innerHTML=v?v:'<span class="missing">Chưa cập nhật</span>';
+  if(v){el.textContent=v;}
+  else{const row=el.closest('[data-contact-row]'); if(row){row.hidden=true;row.style.display='none';} el.textContent='';}
 });
 $$('[data-brand]').forEach(el=>{ if(C.brand) el.textContent=C.brand; });
+$$('[data-year]').forEach(el=>{ el.textContent=new Date().toLocaleString('en-US',{timeZone:'Asia/Ho_Chi_Minh',year:'numeric'}); });
 
 function toast(msg){
   let t=$('#toast'); if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#08151f;color:#efe6d6;padding:12px 20px;border-radius:999px;z-index:400;font-size:.9rem;box-shadow:0 10px 30px rgba(0,0,0,.3);transition:opacity .4s;max-width:90vw;text-align:center';document.body.appendChild(t)}
@@ -141,17 +164,17 @@ if(form){
   if(pre&&sel) sel.value=pre;
   form.addEventListener('submit',e=>{
     e.preventDefault(); const d=Object.fromEntries(new FormData(form));
-    const msg=`Chào ${C.brand||'bạn'}, mình muốn đặt du thuyền:\n• Du thuyền: ${d.yacht}\n• Ngày: ${d.date||'(chưa chọn)'}\n• Khung giờ: ${d.slot}\n• Số khách: ${d.guests}\n• Họ tên: ${d.name}\n• SĐT: ${d.phone}\n• Ghi chú: ${d.note||'-'}`;
+    const msg=T.msg(d);
     $('pre',modal).textContent=msg; modal.classList.add('open');
     const z=$('.m-zalo',modal); if(z){ if(links.zalo){z.href=links.zalo;z.target='_blank';z.style.display='';}else z.style.display='none'; }
     const w=$('.m-wa',modal); if(w){ if(links.wa){w.href=links.wa;w.target='_blank';w.style.display='';}else w.style.display='none'; }
     const m=$('.m-msg',modal); if(m){ if(links.msg){m.href=links.msg;m.target='_blank';m.style.display='';}else m.style.display='none'; }
     const warn=$('.m-warn',modal); if(warn) warn.style.display=(links.zalo||links.wa||links.msg)?'none':'block';
-    navigator.clipboard&&navigator.clipboard.writeText(msg).then(()=>toast('Đã sao chép nội dung — dán vào WhatsApp/Zalo để gửi')).catch(()=>{});
+    navigator.clipboard&&navigator.clipboard.writeText(msg).then(()=>toast(T.copiedSend)).catch(()=>{});
   });
   $('.m-close',modal).onclick=()=>modal.classList.remove('open');
   modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open')});
-  $('.m-copy',modal).onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText($('pre',modal).textContent);toast('Đã sao chép');};
+  $('.m-copy',modal).onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText($('pre',modal).textContent);toast(T.copied);};
 }
 $$('[data-book]').forEach(b=>b.addEventListener('click',e=>{const sel=$('#booking-form select[name=yacht]');if(sel){e.preventDefault();sel.value=b.dataset.book;const t=$('#lien-he');lenis?lenis.scrollTo(t,{offset:-70}):t.scrollIntoView({behavior:'smooth'});}}));
 
@@ -226,7 +249,7 @@ function playYt(btn){
   if(!id||btn.dataset.playing) return;
   btn.dataset.playing='1';
   const raw=btn.getAttribute('aria-label')||'';
-  const title=raw.replace(/^Phát video:\s*/,'');
+  const title=raw.replace(/^[^:]{2,30}:\s*/,'');
   const iframe=document.createElement('iframe');
   iframe.src='https://www.youtube.com/embed/'+encodeURIComponent(id)+'?autoplay=1&rel=0&playsinline=1';
   iframe.title=title;
@@ -248,4 +271,54 @@ document.addEventListener('keydown',e=>{
   e.preventDefault();
   playYt(btn);
 });
+
+/* ---------- live Phú Quốc clock (Asia/Ho_Chi_Minh) ---------- */
+const TZ='Asia/Ho_Chi_Minh';
+const fT=new Intl.DateTimeFormat(T.loc,{timeZone:TZ,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+const fS=new Intl.DateTimeFormat(T.loc,{timeZone:TZ,hour:'2-digit',minute:'2-digit',hour12:false});
+const fD=new Intl.DateTimeFormat(T.loc,{timeZone:TZ,weekday:'long',day:'numeric',month:'long',year:'numeric'});
+const clocks=$$('[data-clock]'); const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+function tick(){const n=new Date();clocks.forEach(el=>{const k=el.dataset.clock;el.textContent=k==='date'?cap(fD.format(n)):k==='short'?fS.format(n):fT.format(n);});}
+if(clocks.length){tick();setInterval(tick,1000);}
+
+/* ---------- live weather (Open-Meteo, no key) ---------- */
+const WX_ICON={
+ sun:'<svg viewBox="0 0 64 64" class="wxi wxi-sun"><g class="rays" stroke="#f4b740" stroke-width="3" stroke-linecap="round"><path d="M32 4v8M32 52v8M4 32h8M52 32h8M12 12l6 6M46 46l6 6M12 52l6-6M46 18l6-6"/></g><circle cx="32" cy="32" r="12" fill="#f4b740"/></svg>',
+ moon:'<svg viewBox="0 0 64 64" class="wxi wxi-moon"><path d="M40 10a22 22 0 1 0 14 34A18 18 0 0 1 40 10z" fill="#e9d9a6"/></svg>',
+ partly:'<svg viewBox="0 0 64 64" class="wxi wxi-partly"><g class="sunp"><g stroke="#f4b740" stroke-width="3" stroke-linecap="round"><path d="M24 4v6M6 22h6M11 9l4 4M37 9l-4 4"/></g><circle cx="24" cy="22" r="9" fill="#f4b740"/></g><path class="cl" d="M20 50h28a10 10 0 0 0 0-20 14 14 0 0 0-27 4A8 8 0 0 0 20 50z" fill="#e8eef2" stroke="#c5d0d8" stroke-width="1.5"/></svg>',
+ cloud:'<svg viewBox="0 0 64 64" class="wxi wxi-cloud"><path class="cl" d="M16 48h32a11 11 0 0 0 0-22 15 15 0 0 0-29 4A9 9 0 0 0 16 48z" fill="#dfe6eb" stroke="#b7c3cc" stroke-width="1.5"/></svg>',
+ fog:'<svg viewBox="0 0 64 64" class="wxi wxi-fog"><path d="M16 36h32a10 10 0 0 0 0-20 14 14 0 0 0-27 4A8 8 0 0 0 16 36z" fill="#dfe6eb"/><g stroke="#b7c3cc" stroke-width="3" stroke-linecap="round" class="fg"><path d="M10 44h44M16 52h32"/></g></svg>',
+ rain:'<svg viewBox="0 0 64 64" class="wxi wxi-rain"><path class="cl" d="M16 38h32a10 10 0 0 0 0-20 14 14 0 0 0-27 4A8 8 0 0 0 16 38z" fill="#cfd9e0" stroke="#a9b7c1" stroke-width="1.5"/><g stroke="#3d8fd6" stroke-width="3" stroke-linecap="round"><path class="d d1" d="M22 44l-3 7"/><path class="d d2" d="M33 44l-3 7"/><path class="d d3" d="M44 44l-3 7"/></g></svg>',
+ storm:'<svg viewBox="0 0 64 64" class="wxi wxi-storm"><path class="cl" d="M16 36h32a10 10 0 0 0 0-20 14 14 0 0 0-27 4A8 8 0 0 0 16 36z" fill="#9fafbb" stroke="#7f909c" stroke-width="1.5"/><path class="bolt" d="M34 38l-8 12h7l-3 10 11-14h-7l4-8z" fill="#f4b740"/><g stroke="#3d8fd6" stroke-width="3" stroke-linecap="round"><path class="d d1" d="M20 42l-3 7"/><path class="d d3" d="M48 42l-3 7"/></g></svg>'
+};
+function wxKind(c,day){ if(c<=1) return day===0?'moon':'sun'; if(c===2) return 'partly'; if(c===3) return 'cloud'; if(c===45||c===48) return 'fog'; if(c>=95) return 'storm'; if((c>=51&&c<=67)||(c>=80&&c<=82)) return 'rain'; return 'cloud'; }
+function wxText(c){ const m=T.wmo; if(m[c]) return m[c]; if(c>=56&&c<=67) return m[63]; if(c>=71&&c<=86) return m[3]; return m[3]; }
+const wxBox=$('[data-weather]'), wxChip=$$('[data-wx-chip]');
+if(wxBox||wxChip.length){
+  const url='https://api.open-meteo.com/v1/forecast?latitude=10.2899&longitude=103.984&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,wind_gusts_10m,is_day&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max&timezone=Asia%2FHo_Chi_Minh&forecast_days=4&wind_speed_unit=kmh';
+  const fail=()=>{ if(wxBox){ $('[data-wx-cond]',wxBox).textContent=T.wxFail; $('[data-wx-icon]',wxBox).innerHTML=WX_ICON.partly; $('[data-wx-temp]',wxBox).textContent='—'; wxBox.classList.add('wx-failed'); } };
+  const ctl=('AbortController' in window)?new AbortController():null; const to=setTimeout(()=>ctl&&ctl.abort(),9000);
+  fetch(url,ctl?{signal:ctl.signal}:{}).then(r=>{if(!r.ok) throw 0; return r.json();}).then(w=>{
+    clearTimeout(to);
+    const c=w.current, d=w.daily; const code=c.weather_code; const temp=Math.round(c.temperature_2m);
+    wxChip.forEach(el=>el.textContent=' · '+temp+'°C');
+    if(!wxBox) return;
+    $('[data-wx-icon]',wxBox).innerHTML=WX_ICON[wxKind(code,c.is_day)];
+    $('[data-wx-temp]',wxBox).textContent=temp+'°C';
+    $('[data-wx-cond]',wxBox).textContent=wxText(code);
+    $('[data-wx-meta]',wxBox).textContent=`${T.feels} ${Math.round(c.apparent_temperature)}°C · ${T.wind} ${Math.round(c.wind_speed_10m)} ${T.kmh} (${T.gust} ${Math.round(c.wind_gusts_10m)})`+(d.precipitation_probability_max&&d.precipitation_probability_max[0]!=null?` · ${T.rain} ${d.precipitation_probability_max[0]}%`:'');
+    const fd=new Intl.DateTimeFormat(T.loc,{weekday:'short',day:'numeric',month:'numeric',timeZone:'UTC'});
+    let html='';
+    for(let i=1;i<Math.min(4,d.time.length);i++){
+      const [y,m,dd]=d.time[i].split('-').map(Number); const lab=fd.format(new Date(Date.UTC(y,m-1,dd,12)));
+      html+=`<div class="wx-day"><span class="wd">${cap(lab)}</span>${WX_ICON[wxKind(d.weather_code[i],1)]}<b>${Math.round(d.temperature_2m_max[i])}° <small>${Math.round(d.temperature_2m_min[i])}°</small></b><span class="wr">💧 ${d.precipitation_probability_max[i]??'–'}% · 💨 ${Math.round(d.wind_speed_10m_max[i])} ${T.kmh}</span><span class="wc">${wxText(d.weather_code[i])}</span></div>`;
+    }
+    $('[data-wx-days]',wxBox).innerHTML=html;
+    const wind=c.wind_speed_10m, gust=c.wind_gusts_10m, pr=(d.precipitation_probability_max||[0])[0]||0;
+    let h=T.hintGood, cls='good';
+    if(code>=95||wind>=30||gust>=45||pr>=80){h=T.hintBad;cls='bad';}
+    else if(wind>=20||gust>=35||pr>=50||(code>=61&&code<=82)){h=T.hintOk;cls='ok';}
+    const hint=$('[data-wx-hint]',wxBox); hint.innerHTML=`<b>${h}</b><br><small>${T.hintNote}</small>`; hint.className='wx-hint '+cls;
+  }).catch(()=>{clearTimeout(to);fail();});
+}
 })();
