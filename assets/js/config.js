@@ -1,13 +1,14 @@
 /* =====================================================================
    CẤU HÌNH LIÊN HỆ — ANH ĐIỀN THÔNG TIN THẬT VÀO ĐÂY (chỉ sửa file này)
-   Để trống "" thì nút tương ứng sẽ hiện nhãn "Chưa cập nhật".
+   Để trống "" thì nút tương ứng sẽ tự ẩn.
    ===================================================================== */
 window.SITE_CONFIG = {
   brand: "Kodee Yachting",          // tên thương hiệu hiển thị (đổi tuỳ ý)
-  zaloPhone: "",                    // VD: "0901234567"  -> mở https://zalo.me/0901234567
   hotline: "",                      // không dùng — đã thay bằng WhatsApp
   whatsappUrl: "https://wa.me/qr/Z5LEIOSP6CSAE1",  // mã QR WhatsApp (không phải số điện thoại)
   whatsappName: "Leo - Yacht Tour",
+  telegramUrl: "https://t.me/kodeeboyzz",
+  telegramName: "@kodeeboyzz",
   facebookUrl: "https://www.facebook.com/profile.php?id=61595914824863",
   facebookLabel: "Kodee Yachting",
   messengerUser: "",                // VD: "tenpage" -> https://m.me/tenpage

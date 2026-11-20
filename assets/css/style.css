@@ -29,7 +29,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.08;letter-spacin
 .btn-gold{background:var(--gold);color:var(--navy)} .btn-gold::before{background:var(--gold-2)}
 .btn-ghost{border:1px solid rgba(255,255,255,.55);color:#fff} .btn-ghost::before{background:#fff} .btn-ghost:hover{color:var(--navy)}
 .btn-dark{background:var(--navy);color:var(--sand)} .btn-dark::before{background:var(--sea)}
-.btn-zalo{background:#0068ff;color:#fff} .btn-zalo::before{background:#0a54c4}
+.btn-tg{background:#229ED9;color:#fff} .btn-tg::before{background:#1a86b9}
 .btn svg{width:18px;height:18px}
 
 /* preloader + transition */
@@ -264,8 +264,8 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.08;letter-spacin
 .form select option{color:#000}
 .form .small{font-size:.78rem;color:#9fb0ba}
 .channels{display:grid;gap:14px;margin-top:28px}
-.channel{display:flex;align-items:center;gap:16px;padding:16px 18px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);transition:transform .5s var(--ease),background .4s}
-.channel:hover{transform:translateX(8px);background:rgba(201,164,100,.12)}
+.channel{display:flex;align-items:center;gap:16px;padding:16px 18px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);transition:translate .5s var(--ease),background .4s}
+.channel:hover{translate:8px 0;background:rgba(201,164,100,.12)}
 .channel .ic{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:var(--navy);flex:none}
 .channel .ic svg{width:22px;height:22px}
 .channel b{display:block}
@@ -299,7 +299,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.08;letter-spacin
 .sticky-cta.show{transform:none}
 .sticky-cta a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:.85em .4em;border-radius:999px;font-size:.84rem;font-weight:600;color:#fff}
 .sticky-cta a[hidden],.fab[hidden],.socials [hidden]{display:none!important}
-.sticky-cta a.z{background:#0068ff}.sticky-cta a.b{background:var(--gold);color:var(--navy)}
+.sticky-cta a.tg{background:#229ED9}.sticky-cta a.b{background:var(--gold);color:var(--navy)}
 .sticky-cta svg{width:17px;height:17px}
 @media (max-width:860px){.sticky-cta{display:flex}}
 .fab{position:fixed;right:24px;bottom:24px;z-index:90;width:62px;height:62px;border-radius:50%;background:#0068ff;color:#fff;display:grid;place-items:center;box-shadow:0 14px 30px -8px rgba(0,104,255,.6)}
@@ -527,3 +527,12 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.08;letter-spacin
 @media (max-width:1240px){.nav{gap:18px}.header .socials{display:none}}
 .header .btn{white-space:nowrap}
 .hero-live{align-self:flex-start;width:fit-content;max-width:100%}
+
+/* Telegram */
+.channel .ic.tg{background:#229ED9;color:#fff}
+.fab-tg{background:#229ED9;bottom:98px;width:54px;height:54px;right:28px;box-shadow:0 14px 30px -8px rgba(34,158,217,.55)}
+.fab-tg svg{width:26px;height:26px}
+.totop{bottom:166px}
+.sticky-cta a svg{flex:none}
+.hero-tg{border-color:rgba(255,255,255,.6)}
+.fab-tg::before{border-color:#229ED9}

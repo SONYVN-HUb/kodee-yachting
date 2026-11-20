@@ -3,7 +3,7 @@
 Web tĩnh (HTML/CSS/JS), không cần build. Hiệu ứng: GSAP + ScrollTrigger + Lenis (CDN jsDelivr).
 
 ## 1. Việc anh cần điền
-1. `assets/js/config.js` — số Zalo, hotline, link Facebook, Messenger, email, tên thương hiệu. Trống thì nút hiện "Chưa cập nhật".
+1. `assets/js/config.js` — WhatsApp, Telegram, link Facebook, Messenger, email, tên thương hiệu. Trống thì nút tự ẩn.
 2. Tên miền: thay `https://kodeevn-yachting.com` trong mọi file:
    `grep -rl kodeevn-yachting.com . | xargs sed -i 's#https://kodeevn-yachting.com#https://tenmiencuaban.com#g'`
 3. Tên thương hiệu "Kodee Yachting" trong title/meta — đổi bằng sed tương tự nếu muốn.

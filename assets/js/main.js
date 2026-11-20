@@ -8,21 +8,21 @@ document.documentElement.classList.remove('no-js');
 /* ---------- i18n ---------- */
 const LANG=((document.documentElement.lang||'vi').slice(0,2).toLowerCase());
 const I18N={
- vi:{loc:'vi-VN',copied:'Đã sao chép',copiedSend:'Đã sao chép nội dung — dán vào WhatsApp để gửi',
+ vi:{loc:'vi-VN',copied:'Đã sao chép',copiedSend:'Đã sao chép nội dung — dán vào WhatsApp hoặc Telegram để gửi',
   msg:d=>`Chào ${C.brand||'bạn'}, mình muốn đặt du thuyền:\n• Du thuyền: ${d.yacht}\n• Ngày: ${d.date||'(chưa chọn)'}\n• Khung giờ: ${d.slot}\n• Số khách: ${d.guests}\n• Họ tên: ${d.name}\n• SĐT: ${d.phone}\n• Ghi chú: ${d.note||'-'}`,
   wxLoading:'Đang tải thời tiết…',wxFail:'Chưa tải được thời tiết lúc này. Nhắn WhatsApp để tụi mình check giúp nhé!',
   feels:'cảm giác',kmh:'km/h',wind:'Gió',gust:'giật',rain:'Mưa',today:'Hôm nay',
   hintGood:'🟢 Gợi ý: gió nhẹ, ít mưa — vibe đẹp để ra khơi!',hintOk:'🟡 Gợi ý: có gió hoặc khả năng mưa — vẫn đi được, nên hỏi trước giờ chạy.',hintBad:'🔴 Gợi ý: gió mạnh / mưa dông — nên hỏi lại lịch tàu trước khi đi.',
   hintNote:'Chỉ là gợi ý tự động, không phải cam kết — thuyền trưởng quyết định theo điều kiện thực tế.',
   wmo:{0:'Trời quang',1:'Nắng nhẹ',2:'Mây rải rác',3:'Nhiều mây',45:'Sương mù',48:'Sương mù',51:'Mưa phùn',53:'Mưa phùn',55:'Mưa phùn',61:'Mưa nhỏ',63:'Mưa vừa',65:'Mưa to',80:'Mưa rào',81:'Mưa rào',82:'Mưa rào lớn',95:'Dông',96:'Dông kèm mưa đá',99:'Dông kèm mưa đá'}},
- en:{loc:'en-GB',copied:'Copied',copiedSend:'Copied — paste it into WhatsApp to send',
+ en:{loc:'en-GB',copied:'Copied',copiedSend:'Copied — paste it into WhatsApp or Telegram to send',
   msg:d=>`Hi ${C.brand||'there'}, I'd like to book a yacht:\n• Yacht: ${d.yacht}\n• Date: ${d.date||'(not chosen)'}\n• Time slot: ${d.slot}\n• Guests: ${d.guests}\n• Name: ${d.name}\n• Phone/WhatsApp: ${d.phone}\n• Notes: ${d.note||'-'}`,
   wxLoading:'Loading weather…',wxFail:"Couldn't load the weather right now. Ping us on WhatsApp and we'll check for you!",
   feels:'feels like',kmh:'km/h',wind:'Wind',gust:'gusts',rain:'Rain',today:'Today',
   hintGood:'🟢 Hint: light wind, low rain chance — great vibe for a boat day!',hintOk:'🟡 Hint: some wind or rain possible — usually fine, but check with us before departure.',hintBad:'🔴 Hint: strong wind / storms — please re-check the schedule with us before you go.',
   hintNote:'Automatic hint only, not a guarantee — the captain decides based on real conditions.',
   wmo:{0:'Clear sky',1:'Mostly sunny',2:'Partly cloudy',3:'Cloudy',45:'Fog',48:'Fog',51:'Drizzle',53:'Drizzle',55:'Drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',80:'Showers',81:'Showers',82:'Heavy showers',95:'Thunderstorm',96:'Thunderstorm & hail',99:'Thunderstorm & hail'}},
- ru:{loc:'ru-RU',copied:'Скопировано',copiedSend:'Скопировано — вставьте текст в WhatsApp и отправьте',
+ ru:{loc:'ru-RU',copied:'Скопировано',copiedSend:'Скопировано — вставьте текст в WhatsApp или Telegram и отправьте',
   msg:d=>`Здравствуйте, ${C.brand||''}! Хочу забронировать яхту:\n• Яхта: ${d.yacht}\n• Дата: ${d.date||'(не выбрана)'}\n• Время: ${d.slot}\n• Гостей: ${d.guests}\n• Имя: ${d.name}\n• Телефон/WhatsApp: ${d.phone}\n• Комментарий: ${d.note||'-'}`,
   wxLoading:'Загружаем погоду…',wxFail:'Не удалось загрузить погоду. Напишите нам в WhatsApp — подскажем!',
   feels:'ощущается как',kmh:'км/ч',wind:'Ветер',gust:'порывы',rain:'Дождь',today:'Сегодня',
@@ -35,7 +35,7 @@ const T=I18N[LANG]||I18N.vi;
 /* ---------- contact wiring ---------- */
 const digits=s=>(s||'').replace(/[^0-9+]/g,'');
 const links={
-  zalo: C.zaloPhone?('https://zalo.me/'+digits(C.zaloPhone).replace(/^\+84/,'0')):'',
+  tg: C.telegramUrl||'',
   tel: C.whatsappUrl||(C.hotline?('tel:'+digits(C.hotline)):''),
   wa: C.whatsappUrl||'',
   fb: C.facebookUrl||'',
@@ -51,7 +51,7 @@ $$('[data-contact]').forEach(a=>{
 $$('[data-contact-text]').forEach(el=>{
   const k=el.dataset.contactText;
   const v={
-    zalo:C.zaloPhone,
+    tg:C.telegramName||C.telegramUrl,
     tel:C.whatsappName||C.whatsappUrl||C.hotline,
     wa:C.whatsappName||C.whatsappUrl,
     fb:C.facebookLabel||C.facebookUrl,
@@ -166,10 +166,10 @@ if(form){
     e.preventDefault(); const d=Object.fromEntries(new FormData(form));
     const msg=T.msg(d);
     $('pre',modal).textContent=msg; modal.classList.add('open');
-    const z=$('.m-zalo',modal); if(z){ if(links.zalo){z.href=links.zalo;z.target='_blank';z.style.display='';}else z.style.display='none'; }
+    const g=$('.m-tg',modal); if(g){ if(links.tg){g.href=links.tg;g.target='_blank';g.style.display='';}else g.style.display='none'; }
     const w=$('.m-wa',modal); if(w){ if(links.wa){w.href=links.wa;w.target='_blank';w.style.display='';}else w.style.display='none'; }
     const m=$('.m-msg',modal); if(m){ if(links.msg){m.href=links.msg;m.target='_blank';m.style.display='';}else m.style.display='none'; }
-    const warn=$('.m-warn',modal); if(warn) warn.style.display=(links.zalo||links.wa||links.msg)?'none':'block';
+    const warn=$('.m-warn',modal); if(warn) warn.style.display=(links.tg||links.wa||links.msg)?'none':'block';
     navigator.clipboard&&navigator.clipboard.writeText(msg).then(()=>toast(T.copiedSend)).catch(()=>{});
   });
   $('.m-close',modal).onclick=()=>modal.classList.remove('open');
