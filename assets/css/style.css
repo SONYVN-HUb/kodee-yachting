@@ -403,11 +403,6 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.08;letter-spacin
 .mobile-menu .social-ico{width:48px;height:48px;border-color:rgba(255,255,255,.4)}
 .mobile-menu .social-ico svg{width:20px;height:20px}
 
-/* hero background video */
-.hero-video{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}
-.hero-video iframe{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:100%;min-width:177.78vh;transform:translate(-50%,-50%);border:0;pointer-events:none}
-@media (prefers-reduced-motion:reduce){.hero-video{display:none}}
-
 /* WhatsApp accents */
 .btn-wa{background:#25D366;color:#fff}.btn-wa::before{background:#1da851}
 .sticky-cta a.wa{background:#25D366}
@@ -446,3 +441,16 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.08;letter-spacin
 .footer-wa p{margin:0;line-height:1.45}
 .footer-wa a{color:#fff}
 .footer-wa a:hover{color:var(--gold)}
+
+/* click-to-play YouTube posters */
+.section-after-hero{padding-top:clamp(56px,8vw,100px)}
+.yt-poster{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;background:#000;cursor:pointer;color:inherit}
+.yt-poster img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease),filter .45s}
+.yt-poster:hover img,.yt-poster:focus-visible img{transform:scale(1.05);filter:brightness(.78)}
+.yt-play{position:absolute;left:50%;top:50%;width:78px;height:78px;margin:-39px 0 0 -39px;border-radius:50%;background:var(--gold);box-shadow:0 14px 32px rgba(0,0,0,.4);transition:transform .4s var(--ease),background .3s;pointer-events:none}
+.yt-play::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-40%,-50%);border-style:solid;border-width:13px 0 13px 22px;border-color:transparent transparent transparent var(--navy)}
+.yt-poster:hover .yt-play,.yt-poster:focus-visible .yt-play{transform:scale(1.08);background:var(--gold-2)}
+.video-frame.is-short .yt-play{width:64px;height:64px;margin:-32px 0 0 -32px}
+.video-frame.is-short .yt-play::after{border-width:11px 0 11px 18px}
+.video-frame.is-playing iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+@media (max-width:700px){.yt-play{width:64px;height:64px;margin:-32px 0 0 -32px}.yt-play::after{border-width:11px 0 11px 18px}}

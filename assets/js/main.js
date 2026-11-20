@@ -219,4 +219,33 @@ function intro(){
   addEventListener('load',()=>ScrollTrigger.refresh());
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',intro); else intro();
+
+/* ---------- YouTube click-to-play (no autoplay until click) ---------- */
+function playYt(btn){
+  const id=btn.dataset.yt;
+  if(!id||btn.dataset.playing) return;
+  btn.dataset.playing='1';
+  const raw=btn.getAttribute('aria-label')||'';
+  const title=raw.replace(/^Phát video:\s*/,'');
+  const iframe=document.createElement('iframe');
+  iframe.src='https://www.youtube.com/embed/'+encodeURIComponent(id)+'?autoplay=1&rel=0&playsinline=1';
+  iframe.title=title;
+  iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+  iframe.setAttribute('allowfullscreen','');
+  iframe.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+  const frame=btn.closest('.video-frame')||btn.parentNode;
+  frame.classList.add('is-playing');
+  btn.replaceWith(iframe);
+}
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('.yt-poster[data-yt]');
+  if(btn) playYt(btn);
+});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter'&&e.key!==' ') return;
+  const btn=e.target.closest&&e.target.closest('.yt-poster[data-yt]');
+  if(!btn) return;
+  e.preventDefault();
+  playYt(btn);
+});
 })();
