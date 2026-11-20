@@ -4,8 +4,8 @@ Web tĩnh (HTML/CSS/JS), không cần build. Hiệu ứng: GSAP + ScrollTrigger 
 
 ## 1. Việc anh cần điền
 1. `assets/js/config.js` — số Zalo, hotline, link Facebook, Messenger, email, tên thương hiệu. Trống thì nút hiện "Chưa cập nhật".
-2. Tên miền: thay `https://TEN-MIEN-CUA-BAN.com` trong mọi file:
-   `grep -rl TEN-MIEN-CUA-BAN.com . | xargs sed -i 's#https://TEN-MIEN-CUA-BAN.com#https://tenmiencuaban.com#g'`
+2. Tên miền: thay `https://kodeevn-yachting.com` trong mọi file:
+   `grep -rl kodeevn-yachting.com . | xargs sed -i 's#https://kodeevn-yachting.com#https://tenmiencuaban.com#g'`
 3. Tên thương hiệu "Kodee Yachting" trong title/meta — đổi bằng sed tương tự nếu muốn.
 4. Phần "Khách hàng nói gì" là NỘI DUNG MẪU — thay bằng đánh giá thật.
 5. Hỏi Theia: chính sách hủy/hoàn tiền, đặt cọc, giá VNĐ, giá cả ngày (đang ghi "Liên hệ").
