@@ -5,8 +5,14 @@
 window.SITE_CONFIG = {
   brand: "Kodee Yachting",          // tên thương hiệu hiển thị (đổi tuỳ ý)
   zaloPhone: "",                    // VD: "0901234567"  -> mở https://zalo.me/0901234567
-  hotline: "",                      // VD: "0901234567"  -> nút Gọi ngay
-  facebookUrl: "",                  // VD: "https://www.facebook.com/tenpage"
+  hotline: "",                      // không dùng — đã thay bằng WhatsApp
+  whatsappUrl: "https://wa.me/qr/Z5LEIOSP6CSAE1",  // mã QR WhatsApp (không phải số điện thoại)
+  whatsappName: "Leo - Yacht Tour",
+  facebookUrl: "https://www.facebook.com/profile.php?id=61595914824863",
+  facebookLabel: "Kodee Yachting",
   messengerUser: "",                // VD: "tenpage" -> https://m.me/tenpage
-  email: ""                         // VD: "booking@tenmien.com"
+  email: "",                        // VD: "booking@tenmien.com"
+  youtubeUrl: "https://www.youtube.com/@ptn.moment",
+  youtubeSubscribeUrl: "https://www.youtube.com/@ptn.moment?sub_confirmation=1",
+  youtubeChannelName: "Leo Yacht Tour VN"
 };

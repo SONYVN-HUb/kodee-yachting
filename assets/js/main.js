@@ -9,18 +9,34 @@ document.documentElement.classList.remove('no-js');
 const digits=s=>(s||'').replace(/[^0-9+]/g,'');
 const links={
   zalo: C.zaloPhone?('https://zalo.me/'+digits(C.zaloPhone).replace(/^\+84/,'0')):'',
-  tel: C.hotline?('tel:'+digits(C.hotline)):'',
+  tel: C.whatsappUrl||(C.hotline?('tel:'+digits(C.hotline)):''),
+  wa: C.whatsappUrl||'',
   fb: C.facebookUrl||'',
   msg: C.messengerUser?('https://m.me/'+C.messengerUser):'',
-  mail: C.email?('mailto:'+C.email):''
+  mail: C.email?('mailto:'+C.email):'',
+  yt: C.youtubeUrl||''
 };
+const labels={zalo:'số Zalo',tel:'WhatsApp',wa:'WhatsApp',fb:'link Facebook',msg:'Messenger',mail:'email',yt:'kênh YouTube'};
 $$('[data-contact]').forEach(a=>{
   const k=a.dataset.contact, url=links[k];
   if(url){a.href=url; if(/^https/.test(url)){a.target='_blank';a.rel='noopener'}}
-  else{a.href='#lien-he'; a.dataset.missing='1'; a.addEventListener('click',e=>{e.preventDefault();toast('Chủ trang chưa điền '+({zalo:'số Zalo',tel:'hotline',fb:'link Facebook',msg:'Messenger',mail:'email'}[k])+' trong assets/js/config.js');});}
+  else{
+    a.dataset.missing='1';
+    if(a.closest('.sticky-cta,.fab,.socials,.header-actions')){a.hidden=true;return;}
+    a.href='#lien-he';
+    a.addEventListener('click',e=>{e.preventDefault();toast('Chủ trang chưa điền '+ (labels[k]||k) +' trong assets/js/config.js');});
+  }
 });
 $$('[data-contact-text]').forEach(el=>{
-  const k=el.dataset.contactText, v={zalo:C.zaloPhone,tel:C.hotline,fb:C.facebookUrl,mail:C.email}[k];
+  const k=el.dataset.contactText;
+  const v={
+    zalo:C.zaloPhone,
+    tel:C.whatsappName||C.whatsappUrl||C.hotline,
+    wa:C.whatsappName||C.whatsappUrl,
+    fb:C.facebookLabel||C.facebookUrl,
+    mail:C.email,
+    yt:C.youtubeChannelName||C.youtubeUrl
+  }[k];
   el.innerHTML=v?v:'<span class="missing">Chưa cập nhật</span>';
 });
 $$('[data-brand]').forEach(el=>{ if(C.brand) el.textContent=C.brand; });
@@ -127,10 +143,11 @@ if(form){
     e.preventDefault(); const d=Object.fromEntries(new FormData(form));
     const msg=`Chào ${C.brand||'bạn'}, mình muốn đặt du thuyền:\n• Du thuyền: ${d.yacht}\n• Ngày: ${d.date||'(chưa chọn)'}\n• Khung giờ: ${d.slot}\n• Số khách: ${d.guests}\n• Họ tên: ${d.name}\n• SĐT: ${d.phone}\n• Ghi chú: ${d.note||'-'}`;
     $('pre',modal).textContent=msg; modal.classList.add('open');
-    const z=$('.m-zalo',modal); if(links.zalo){z.href=links.zalo;z.target='_blank';z.style.display='';}else{z.style.display='none';}
-    const m=$('.m-msg',modal); if(links.msg){m.href=links.msg;m.target='_blank';m.style.display='';}else m.style.display='none';
-    $('.m-warn',modal).style.display=(links.zalo||links.msg)?'none':'block';
-    navigator.clipboard&&navigator.clipboard.writeText(msg).then(()=>toast('Đã sao chép nội dung — dán vào Zalo/Messenger để gửi')).catch(()=>{});
+    const z=$('.m-zalo',modal); if(z){ if(links.zalo){z.href=links.zalo;z.target='_blank';z.style.display='';}else z.style.display='none'; }
+    const w=$('.m-wa',modal); if(w){ if(links.wa){w.href=links.wa;w.target='_blank';w.style.display='';}else w.style.display='none'; }
+    const m=$('.m-msg',modal); if(m){ if(links.msg){m.href=links.msg;m.target='_blank';m.style.display='';}else m.style.display='none'; }
+    const warn=$('.m-warn',modal); if(warn) warn.style.display=(links.zalo||links.wa||links.msg)?'none':'block';
+    navigator.clipboard&&navigator.clipboard.writeText(msg).then(()=>toast('Đã sao chép nội dung — dán vào WhatsApp/Zalo để gửi')).catch(()=>{});
   });
   $('.m-close',modal).onclick=()=>modal.classList.remove('open');
   modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open')});
