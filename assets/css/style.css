@@ -298,6 +298,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.08;letter-spacin
 .sticky-cta{position:fixed;left:12px;right:12px;bottom:12px;z-index:90;display:none;gap:8px;padding:8px;border-radius:999px;background:rgba(8,21,31,.92);backdrop-filter:blur(10px);box-shadow:0 20px 40px -10px rgba(0,0,0,.4);transform:translateY(140%);transition:transform .6s var(--ease)}
 .sticky-cta.show{transform:none}
 .sticky-cta a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:.85em .4em;border-radius:999px;font-size:.84rem;font-weight:600;color:#fff}
+.sticky-cta a[hidden],.fab[hidden],.socials [hidden]{display:none!important}
 .sticky-cta a.z{background:#0068ff}.sticky-cta a.b{background:var(--gold);color:var(--navy)}
 .sticky-cta svg{width:17px;height:17px}
 @media (max-width:860px){.sticky-cta{display:flex}}
@@ -391,7 +392,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.08;letter-spacin
 
 /* reveal fallback: elements are visible unless GSAP marks them */
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media (max-width:860px){.cursor{display:none}.aside{order:-1}.totop{display:none}.logo small{display:none}.logo{font-size:1.2rem}}
+@media (max-width:860px){.cursor{display:none}.aside{order:-1}.totop{display:none}.logo small{display:none}.logo{font-size:1.05rem;letter-spacing:.08em;gap:8px}.logo svg{width:30px;height:30px}.burger{flex:none;z-index:2}.header .container{gap:10px}}
 
 /* header socials */
 .socials{display:flex;align-items:center;gap:8px}
@@ -433,7 +434,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.08;letter-spacin
 }
 
 /* WhatsApp QR */
-.wa-qr{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:22px;max-width:280px;color:inherit}
+.wa-qr{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:28px;max-width:280px;color:inherit;position:relative;z-index:1}
 .wa-qr img{width:100%;height:auto;border-radius:18px;background:#fff;padding:0;box-shadow:0 16px 40px -18px rgba(0,0,0,.5)}
 .wa-qr span{font-size:.85rem;color:#aab6be}
 .footer-wa{display:flex;align-items:center;gap:14px;margin-top:16px}
